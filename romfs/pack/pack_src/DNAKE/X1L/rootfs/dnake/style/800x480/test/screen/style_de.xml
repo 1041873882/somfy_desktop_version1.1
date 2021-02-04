@@ -1,0 +1,33 @@
+<style>
+	
+	<bkg_1>
+		<x>0</x>
+		<y>0</y>
+		<url>red.png</url>
+	</bkg_1>
+	
+	<bkg_2>
+		<x>0</x>
+		<y>0</y>
+		<url>green.png</url>
+	</bkg_2>
+	
+	<bkg_3>
+		<x>0</x>
+		<y>0</y>
+		<url>blue.png</url>
+	</bkg_3>
+
+	<exit>
+		<x>0</x>
+		<y>430</y>
+		<url>../../global/touch.png</url>
+	</exit>
+	
+	<cycle>
+		<x>750</x>
+		<y>430</y>
+		<url>../../global/touch.png</url>
+	</cycle>
+	
+</style>

@@ -1,0 +1,68 @@
+#ifndef __RTS_UTIL_H__
+#define __RTS_UTIL_H__
+
+#include "mWindow.h"
+#include "mButton.h"
+
+#define CHANNEL_MAX		5
+
+class RTSUtil {
+public:
+	RTSUtil();
+	virtual ~RTSUtil();
+
+	enum TYPE {
+		TYPE_DEFAULT    = 0,
+		AWNING          = 1,
+		ROLLER_SHUTTER  = 2,
+		SWINGING        = 3,
+		LIGHT_BULB      = 4,
+		PLUG            = 5,
+		GATE            = 6,
+		SLIDING_GATE    = 7,
+		GARAGE_DOOR     = 8,
+		GENERICEQP      = 9, //generic equipment
+	};
+
+	enum ACTION {
+		AC_DEFAULT = 0,  //action default
+		ADD        = 1,
+		ADD_GROUP  = 2,
+		REMOVE     = 3
+	};
+
+	struct {
+		int type;
+		int number;
+	} RTSchannels[CHANNEL_MAX];
+
+	void setSelectedChnId(int id);
+	int  getSelectedChnId();
+
+	void setCurrentType(int type);
+	int  getCurrentType();
+
+	void setCurrentNumber(int num);
+	int  getCurrentNumber();
+
+	void setCurrentAction(int action);
+	int  getCurrentAction();
+
+	int  getChannelNumber(int num);
+	int  getChannelType(int channel);
+	void add(int channel, int type);
+	void remove(int channel);
+
+	const char *dir();
+	void save();
+	void load();
+	void reset();
+private:
+	int selectedChnId;  //selected channel id is 0 or 1
+	int currentNumber;
+	int currentType;
+	int currentAction;
+};
+
+extern RTSUtil rTSUtil;
+#endif

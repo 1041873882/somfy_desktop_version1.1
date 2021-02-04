@@ -1,0 +1,273 @@
+#include "sys.h"
+#include "wMain.h"
+#include "wSetup.h"
+#include "SysCommand.h"
+#include "wRTSRemove.h"
+#include "wVideoSetting.h"
+#include "wReset.h"
+#include "DebugUtil.h"
+#include "BeanUtil.h"
+#include "wUpgrade.h"
+#include "SysSdcard.h"
+#include "wBellSetting.h"
+#include "wDateSetting.h"
+#include "wTimeSetting.h"
+#include "wKeySetting.h"
+#include "wChoiceSound.h"
+#include "wUploadPictures.h"
+#include "wRTSGroup.h"
+
+static int select_idx = 0;
+static int current_page = 0;
+
+wSetup::wSetup(): mWindow("setup")
+{
+	m_bkg.setParent(this);
+	m_bkg.load(m_style, "bkg");
+	m_icon.setParent(this);
+	m_icon.load(m_style, "icon");
+	char buf[64];
+	for (int i = 0; i < MAX_SET_BTN; i++) {
+		sprintf(buf, "btn_0_%d", i+1);
+		m_set_btn[i].setParent(this);
+		m_set_btn[i].load(m_style, buf);
+	}
+	m_select_area.setParent(this);
+	m_select_area.load(m_style, "select_area");
+	loadSetBtn();
+	selectChange();
+	loadNavigation();
+	fb_timeout = 120;
+	gettimeofday(&led_tv, NULL);
+}
+
+wSetup::~wSetup()
+{
+}
+
+void wSetup::selectChange(void)
+{
+	char buf[64];
+	sprintf(buf, "/style/btn_%d_%d/x", current_page, select_idx+1);
+	int x = m_style.getInt(buf, 79);
+	sprintf(buf, "/style/btn_%d_%d/y", current_page, select_idx+1);
+	int y = m_style.getInt(buf, 95);
+	m_select_area.move(x, y);
+}
+
+void wSetup::doChange(int direction)
+{
+	int max_set_btn = MAX_SET_BTN;
+	if (current_page) {
+		max_set_btn = 5;
+	}
+	if (direction == 1) {
+		if (++select_idx >= max_set_btn) {
+			select_idx = 0;
+		}
+	} else if (direction == -1) {
+		if (--select_idx < 0) {
+			select_idx = max_set_btn - 1;
+		}
+	} else {
+		if (max_set_btn <= MAX_NUM_PER_LINE) {
+			goto end;
+		}
+		select_idx += MAX_NUM_PER_LINE;
+		if (select_idx >= max_set_btn) {
+			if (select_idx < (max_set_btn+select_idx%MAX_NUM_PER_LINE)) {
+				select_idx = max_set_btn - 1;
+			} else {
+				select_idx = select_idx % MAX_NUM_PER_LINE;
+			}
+		}
+	}
+end:
+	selectChange();
+}
+
+void wSetup::doTimer(void)
+{
+	mWindow::doTimer();
+	if (__val(led_tv) && __ts(led_tv) > 200) {
+		loadLed();
+		memset(&led_tv, 0, sizeof(led_tv));
+	}
+}
+
+void wSetup::doEvent(mEvent *e)
+{
+	mWindow::doEvent(e);
+	if (e->type == mEvent::KeyPress) {
+		if (e->wParam == KEY_M_RIGHT) {
+			doChange(1);
+		} else if (e->wParam == KEY_M_LEFT) {
+			doChange(-1);
+		} else if (e->wParam == KEY_M_F3) {
+			doChange(0);
+		} else if (e->wParam == KEY_M_CONFIRM) {
+			doConfirm();
+		} else if (e->wParam == KEY_M_HOME) {
+			select_idx = 0;
+			current_page = 0;
+			wMain *main = new wMain();
+			main->show();
+		}
+	}
+}
+
+void wSetup::doVideoSetting(int type)
+{
+	if (command.m_mode > command.NONE) {
+		PRINT_DEBUG("mode is no NONE\n");
+		return;
+	}
+	int masterState = beanUtil.getMasterState();
+	int slaveState = beanUtil.getSlaveState();
+	if (!masterState) {
+		PRINT_DEBUG("mater monitor no exist \n");
+		return;
+	}
+	if (masterState && slaveState) {
+		command.sendEventAnswerReq(TIME_120S, command.ANSWER_MEASURE);
+		return;
+	}
+	beanUtil.setVideoSetType(type);
+	command.sendMonitorReq(TIME_120S, command.ANSWER_MEASURE);
+}
+
+void wSetup::doConfirm(void)
+{
+	switch (select_idx) {
+	case 0:
+		if (current_page) {
+			current_page--;
+			loadSetBtn();
+		} else {
+			wTimeSetting *timeSetting = new wTimeSetting();
+			timeSetting->show();
+		}
+		break;
+	case 1:
+		if (current_page) {
+			wKeySetting *keySetting = new wKeySetting();
+			keySetting->show();
+		} else {
+			wDateSetting *dateSetting = new wDateSetting();
+			dateSetting->show();
+		}
+		break;
+	case 2:
+		if (current_page) {
+			if (sdcard.used()) {
+				wUploadPictures *uploadPictures = new wUploadPictures();
+				uploadPictures->show();
+			}
+		} else {
+			wChoiceSound *choiceSound = new wChoiceSound();
+			choiceSound->show();
+		}
+		break;
+	case 3:
+		if (current_page) {
+			if (sdcard.used()) {
+				wUpgrade *upgrade = new wUpgrade();
+				upgrade->show();
+			}
+		} else {
+			wBellSetting *bellSetting = new wBellSetting();
+			bellSetting->show();
+		}
+		break;
+	case 4:
+		if (current_page) {
+			wReset *reset = new wReset();
+			reset->show();
+		} else {
+			doVideoSetting(0);
+		}
+		break;
+	case 5:
+		{
+			doVideoSetting(1);
+		}
+		break;
+	case 6:
+		{
+			doVideoSetting(2);
+		}
+		break;
+	case 7:
+		{
+			wRTSGroup *rtsGroup = new wRTSGroup();
+			rtsGroup->show();
+		}
+		break;
+	case 8:
+		{
+			wRTSRemove *rtsRemove = new wRTSRemove();
+			rtsRemove->show();
+		}
+		break;
+	case 9:
+		{
+			current_page++;
+			select_idx = 0;
+			loadSetBtn();
+			selectChange();
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void wSetup::loadSetBtn(void)
+{
+	char buf[64];
+	for (int i = 0; i < MAX_SET_BTN; i++) {
+		if (i < 5) {
+			sprintf(buf, "btn_%d_%d", current_page, i+1);
+			m_set_btn[i].load(m_style, buf);
+		} else {
+			if (current_page) {
+				m_set_btn[i].hide();
+			} else {
+				m_set_btn[i].show();
+			}
+		}
+	}
+	if (current_page && !sdcard.used()) {
+		m_set_btn[2].load(m_style, "upload_inactive");
+		m_set_btn[3].load(m_style, "upgrade_inactive");
+	}
+}
+
+void wSetup::loadNavigation(void)
+{
+	m_right.setParent(this);
+	m_right.load(m_style, "right");
+	m_left.setParent(this);
+	m_left.load(m_style, "left");
+	m_down.setParent(this);
+	m_down.load(m_style, "down");
+	m_confirm.setParent(this);
+	m_confirm.load(m_style, "confirm");
+	m_separator.setParent(this);
+	m_separator.load(m_style, "separator");
+	m_home.setParent(this);
+	m_home.load(m_style, "home");
+}
+
+void wSetup::loadLed(void)
+{
+	uint8_t data[9] = {0};
+	for (int i = LED1; i <= LED9; i++) {
+		if (i >= LED5) {
+			data[i] = LED_ON;
+		} else {
+			data[i] = LED_OFF;
+		}
+	}
+	command.sendLedControl(data);
+}

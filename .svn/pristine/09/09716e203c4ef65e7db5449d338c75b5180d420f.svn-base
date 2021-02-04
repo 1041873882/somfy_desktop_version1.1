@@ -1,0 +1,248 @@
+#include "dxml.h"
+#include "sys.h"
+#include "BeanUtil.h"
+
+#define  SYS_FILE_PATH   "/dnake/data"
+#define  SAVE_FILE_NAME  "setting.xml"
+
+#define  MUSIC_NAME_MAX_SIZE   64
+
+BeanUtil beanUtil;
+
+BeanUtil::BeanUtil()
+{
+	bellId               = 0;
+	bellProgressBarNum   = 14;
+	measureAudioNum      = 14;
+	measureMonitorState  = 1;
+	measureColorNum      = 8;
+	measureLuminosityNum = 10;
+	measureContrastNum   = 10;
+	measureResetState    = 1;
+	openTimeId           = 0;
+
+	masterState = 1;
+	slaveState  = 0;
+	unAnswerNum = 0;
+}
+
+BeanUtil::~BeanUtil()
+{
+}
+
+void BeanUtil::setBellId(int id)
+{
+	bellId = id;
+}
+
+int BeanUtil::getBellId()
+{
+	return bellId;
+}
+
+void BeanUtil::set24Hour(int val)
+{
+	a24_hour = val;
+}
+
+int BeanUtil::get24Hour(void)
+{
+	return a24_hour;
+}
+
+void BeanUtil::setBellProgressBarNum(int id)
+{
+	bellProgressBarNum = id;
+}
+
+int BeanUtil::getBellProgressBarNum()
+{
+	return bellProgressBarNum;
+}
+
+void BeanUtil::setMeasureAudioNum(int num)
+{
+	measureAudioNum = num;
+}
+
+int BeanUtil::getMeasureAudioNum()
+{
+	return measureAudioNum;
+}
+
+void BeanUtil::setMeasureMonitorState(int state)
+{
+	measureMonitorState = state;
+}
+
+int BeanUtil::getMeasureMonitorState()
+{
+	return measureMonitorState;
+}
+
+void BeanUtil::setMeasureColorNum(int num)
+{
+	measureColorNum = num;
+}
+
+int BeanUtil::getMeasureColorNum()
+{
+	return measureColorNum;
+}
+
+void BeanUtil::setMeasureLuminosityNum(int num)
+{
+	measureLuminosityNum = num;
+}
+
+int BeanUtil::getMeasureLuminosityNum()
+{
+	return measureLuminosityNum;
+}
+
+void BeanUtil::setMeasureContrastNum(int num)
+{
+	measureContrastNum = num;
+}
+
+int BeanUtil::getMeasureContrastNum()
+{
+	return measureContrastNum;
+}
+
+void BeanUtil::setSlaveState(int state)
+{
+	slaveState = state;
+}
+
+int BeanUtil::getSlaveState()
+{
+	return slaveState;
+}
+
+void BeanUtil::setMasterState(int state)
+{
+	masterState = state;
+}
+
+int BeanUtil::getMasterState()
+{
+	return masterState;
+}
+
+void BeanUtil::setUnAnswer(int num)
+{
+	unAnswerNum = num;
+}
+
+int BeanUtil::getUnAnswer()
+{
+	return unAnswerNum;
+}
+
+void BeanUtil::setResetState(int state)
+{
+	measureResetState = state;
+}
+
+int BeanUtil::getResetState()
+{
+	return measureResetState;
+}
+
+void BeanUtil::setOpenTimeId(int id)
+{
+	openTimeId = id;
+}
+
+int BeanUtil::getOpenTimeId()
+{
+	return openTimeId;
+}
+
+const char *BeanUtil::dir()
+{
+	return SYS_FILE_PATH;
+}
+
+int BeanUtil::getVideoSetType(void)
+{
+	return videoSetType;
+}
+
+void BeanUtil::setVideoSetType(int val)
+{
+	videoSetType = val;
+}
+
+void BeanUtil::setMissedCall(int mode)
+{
+	missedCall = mode;
+}
+
+int BeanUtil::getMissedCall(void)
+{
+	return missedCall;
+}
+
+void BeanUtil::load()
+{
+	dxml p;
+	char s[128];
+	sprintf(s, "%s/%s", dir(), SAVE_FILE_NAME);
+	p.loadFile(s);
+
+	setBellId(p.getInt("/bell/id", 0));
+	setBellProgressBarNum(p.getInt("/bell/pgsBarNum", 11));
+	setMeasureAudioNum(p.getInt("/measure/audioNum", 14));
+	setMeasureMonitorState(p.getInt("/measure/monitorState", 1));
+	setMeasureColorNum(p.getInt("/measure/colorValue", 8));
+	setMeasureLuminosityNum(p.getInt("/measure/lumiousValue", 10));
+	setMeasureContrastNum(p.getInt("/measure/contrastValue", 10));
+	setMasterState(p.getInt("/talk/master", 1));
+	setSlaveState(p.getInt("/talk/slave", 0));
+	setUnAnswer(p.getInt("/talk/unAnswer", 0));
+	setMissedCall(p.getInt("/talk/missed", 0));
+	setResetState(p.getInt("/measure/reset", 1));
+	setOpenTimeId(p.getInt("/measure/openTimeId", 0));
+	set24Hour(p.getInt("/measure/24Hour", 0));
+
+}
+
+void BeanUtil::save()
+{
+	char s[128];
+	dxml p;
+
+	p.setInt("/bell/id", bellId);
+	p.setInt("/bell/pgsBarNum", bellProgressBarNum);
+	p.setInt("/measure/audioNum", measureAudioNum);
+	p.setInt("/measure/monitorState", measureMonitorState);
+	p.setInt("/measure/colorValue", measureColorNum);
+	p.setInt("/measure/lumiousValue", measureLuminosityNum);
+	p.setInt("/measure/contrastValue", measureContrastNum);
+	p.setInt("/talk/master", masterState);
+	p.setInt("/talk/slave", slaveState);
+	p.setInt("/talk/unAnswer", unAnswerNum);
+	p.setInt("/talk/missed", missedCall);
+	p.setInt("/measure/reset", measureResetState);
+	p.setInt("measure/openTimeId", openTimeId);
+	p.setInt("measure/24Hour", a24_hour);
+
+	sprintf(s, "%s/%s", dir(), SAVE_FILE_NAME);
+	p.saveFile(s);
+	system("sync");
+}
+
+void BeanUtil::measureReset()
+{
+	bellId = 0;
+	bellProgressBarNum = 11;
+	measureAudioNum = 14;
+	measureMonitorState = 1;
+	measureColorNum = 8;
+	measureLuminosityNum = 10;
+	measureContrastNum = 10;
+	measureResetState = 1;
+	openTimeId = 0;
+}

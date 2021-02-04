@@ -1,0 +1,123 @@
+#include "sys.h"
+#include "wMain.h"
+#include "RTSUtil.h"
+#include "wRTSProg.h"
+#include "wRTSDevice.h"
+#include "SysCommand.h"
+
+wRTSDevice::wRTSDevice(): mWindow("RTS/Device")
+{
+	m_bkg.setParent(this);
+	m_bkg.load(m_style, "bkg");
+	m_icon.setParent(this);
+	m_icon.load(m_style, "icon");
+	char buf[128];
+	for (int i = 0; i < ADD_RTS_DEVICE_MAX; i++) {
+		sprintf(buf, "device_%d", i+1);
+		m_devices[i].setParent(this);
+		m_devices[i].load(m_style, buf);
+	}
+	m_select_area.setParent(this);
+	m_select_area.load(m_style, "select_area");
+	m_select_idx = rTSUtil.getCurrentType()-1;
+	selectChange();
+	loadNavigation();
+	fb_timeout = 120;
+	gettimeofday(&led_tv, NULL);
+}
+
+wRTSDevice::~wRTSDevice()
+{
+}
+
+void wRTSDevice::selectChange(void)
+{
+	char buf[64];
+	sprintf(buf, "/style/device_%d/x", m_select_idx+1);
+	int x = m_style.getInt(buf, 79);
+	sprintf(buf, "/style/device_%d/y", m_select_idx+1);
+	int y = m_style.getInt(buf, 95);
+	m_select_area.move(x, y);
+}
+
+void wRTSDevice::doChange(int direction)
+{
+	if (direction == -1) {
+		if (--m_select_idx < 0) {
+			m_select_idx = ADD_RTS_DEVICE_MAX - 1;
+		}
+	} else if (direction == 1) {
+		if (++m_select_idx >= ADD_RTS_DEVICE_MAX) {
+			m_select_idx = 0;
+		}
+	} else {
+		m_select_idx += MAX_NUM_PER_LINE;
+		if (m_select_idx >= ADD_RTS_DEVICE_MAX) {
+			if (m_select_idx < (ADD_RTS_DEVICE_MAX+m_select_idx%MAX_NUM_PER_LINE)) {
+				m_select_idx = ADD_RTS_DEVICE_MAX - 1;
+			} else {
+				m_select_idx = m_select_idx % MAX_NUM_PER_LINE;
+			}
+		}
+	}
+	selectChange();
+}
+
+void wRTSDevice::doTimer(void)
+{
+	mWindow::doTimer();
+	if (__val(led_tv) && __ts(led_tv) > 200) {
+		loadLed();
+		memset(&led_tv, 0, sizeof(led_tv));
+	}
+}
+
+void wRTSDevice::doEvent(mEvent *e)
+{
+	mWindow::doEvent(e);
+	if (e->type == mEvent::KeyPress) {
+		if (e->wParam == KEY_M_CONFIRM) {
+			rTSUtil.setCurrentType(m_select_idx+1);
+			wRTSProg *prog = new wRTSProg();
+			prog->show();
+		} else if (e->wParam == KEY_M_F3) {
+			doChange(0);
+		} else if (e->wParam == KEY_M_HOME) {
+			wMain *main = new wMain();
+			main->show();
+		} else if (e->wParam == KEY_M_RIGHT) {
+			doChange(1);
+		} else if (e->wParam == KEY_M_LEFT) {
+			doChange(-1);
+		}
+	}
+}
+
+void wRTSDevice::loadNavigation(void)
+{
+	m_right.setParent(this);
+	m_right.load(m_style, "right");
+	m_left.setParent(this);
+	m_left.load(m_style, "left");
+	m_down.setParent(this);
+	m_down.load(m_style, "down");
+	m_confirm.setParent(this);
+	m_confirm.load(m_style, "confirm");
+	m_separator.setParent(this);
+	m_separator.load(m_style, "separator");
+	m_home.setParent(this);
+	m_home.load(m_style, "home");
+}
+
+void wRTSDevice::loadLed(void)
+{
+	uint8_t data[9] = {0};
+	for (int i = LED1; i <= LED9; i++) {
+		if (i >= LED5) {
+			data[i] = LED_ON;
+		} else {
+			data[i] = LED_OFF;
+		}
+	}
+	command.sendLedControl(data);
+}

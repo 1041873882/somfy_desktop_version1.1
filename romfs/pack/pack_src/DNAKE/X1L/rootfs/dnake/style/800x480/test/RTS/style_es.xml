@@ -1,0 +1,100 @@
+<style>
+	
+	<bkg>
+		<x>0</x>
+		<y>0</y>
+		<url>../../global/bkg.jpg</url>
+	</bkg>
+	
+	<match>
+		<x>100</x>
+		<y>165</y>
+		<url>../../global/alert/alert_blue.jpg</url>
+	</match>
+	
+	<delete>
+		<x>300</x>
+		<y>165</y>
+		<url>../../global/alert/alert_red.jpg</url>
+	</delete>
+	
+	<match_txt>
+		<x>100</x>
+		<y>165</y>
+		<text>Match</text>
+		<style>font:30; color:000000; width:150; height:150; align:center;</style>
+	</match_txt>
+	
+	<delete_txt>
+		<x>300</x>
+		<y>165</y>
+		<text>Delete</text>
+		<style>font:30; color:000000; width:150; height:150; align:center;</style>
+	</delete_txt>
+	
+	
+	<top>
+		<x>561</x>
+		<y>92</y>
+		<url>../../RTSControl/top_un_rollershutter_0.png</url>
+	</top>
+	
+	<ctl_on_1>
+		<x>561</x>
+		<y>92</y>
+		<url>../../RTSControl/top_on_rollershutter1_1.png</url>
+	</ctl_on_1>
+	
+	<ctl_un_1>
+		<x>561</x>
+		<y>92</y>
+		<url>../../RTSControl/top_un_rollershutter_1.png</url>
+	</ctl_un_1>
+	
+	
+	<middle>
+		<x>561</x>
+		<y>194</y>
+		<url>../../RTSControl/mid_un_rollershutter_0.png</url>
+	</middle>
+	
+	<ctl_on_2>
+		<x>561</x>
+		<y>194</y>
+		<url>../../RTSControl/mid_on_rollershutter_1.png</url>
+	</ctl_on_2>
+	
+	<ctl_un_2>
+		<x>561</x>
+		<y>194</y>
+		<url>../../RTSControl/mid_un_rollershutter_1.png</url>
+	</ctl_un_2>
+	
+	<bottom>
+		<x>561</x>
+		<y>296</y>
+		<url>../../RTSControl/bot_un_rollershutter_0.png</url>
+	</bottom>
+	
+	<ctl_on_3>
+		<x>561</x>
+		<y>296</y>
+		<url>../../RTSControl/bot_on_rollershutter_1.png</url>
+	</ctl_on_3>
+	
+	<ctl_un_3>
+		<x>561</x>
+		<y>296</y>
+		<url>../../RTSControl/bot_un_rollershutter_1.png</url>
+	</ctl_un_3>
+	
+	<exit>
+		<x>730</x>
+		<y>420</y>
+		<url>../../global/reset/next_blue.png</url>
+	</exit>
+	
+</style>
+
+	
+	

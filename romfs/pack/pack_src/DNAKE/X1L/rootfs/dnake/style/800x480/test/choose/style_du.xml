@@ -1,0 +1,207 @@
+<style>
+	
+	<osd>
+		<x>0</x>
+		<y>0</y>
+		<url>osd.jpg</url>
+	</osd>
+	
+	<bkg>
+		<x>0</x>
+		<y>0</y>
+		<url>../global/bkg.jpg</url>
+	</bkg>
+	
+	<toolbar_1>
+		<x>0</x>
+		<y>410</y>
+		<url>toolbar_white.jpg</url>
+	</toolbar_1>
+	
+	<toolbar_2>
+		<x>0</x>
+		<y>410</y>
+		<url>toolbar_black.jpg</url>
+	</toolbar_2>
+	
+	<exit_1>
+		<x>0</x>
+		<y>414</y>
+		<url>exit_1.png</url>
+	</exit_1>
+	
+	<exit_2>
+		<x>0</x>
+		<y>414</y>
+		<url>exit_2.png</url>
+	</exit_2>
+
+	<answer_on_1>
+		<x>231</x>
+		<y>414</y>
+		<url>answer_on_1.png</url>
+	</answer_on_1>
+	
+	<answer_on_2>
+		<x>231</x>
+		<y>414</y>
+		<url>answer_on_2.png</url>
+	</answer_on_2>
+	
+	<answer_un_1>
+		<x>231</x>
+		<y>414</y>
+		<url>answer_un_1.png</url>
+	</answer_un_1>
+	
+	<answer_un_2>
+		<x>231</x>
+		<y>414</y>
+		<url>answer_un_2.png</url>
+	</answer_un_2>
+	
+	<hangup_on_1>
+		<x>231</x>
+		<y>414</y>
+		<url>hangup_on_1.png</url>
+	</hangup_on_1>
+	
+	<hangup_on_2>
+		<x>231</x>
+		<y>414</y>
+		<url>hangup_on_2.png</url>
+	</hangup_on_2>
+	
+	<hangup_un_1>
+		<x>231</x>
+		<y>414</y>
+		<url>hangup_un_1.png</url>
+	</hangup_un_1>
+	
+	<hangup_un_2>
+		<x>231</x>
+		<y>414</y>
+		<url>hangup_un_2.png</url>
+	</hangup_un_2>
+	
+	<gate_on_1>
+		<x>323</x>
+		<y>414</y>
+		<url>gate_on_1.png</url>
+	</gate_on_1>
+	
+	<gate_on_2>
+		<x>323</x>
+		<y>414</y>
+		<url>gate_on_2.png</url>
+	</gate_on_2>
+	
+	<gate_un_1>
+		<x>323</x>
+		<y>414</y>
+		<url>gate_un_1.png</url>
+	</gate_un_1>
+	
+	<gate_un_2>
+		<x>323</x>
+		<y>414</y>
+		<url>gate_un_2.png</url>
+	</gate_un_2>
+	
+	<door_on_1>
+		<x>415</x>
+		<y>414</y>
+		<url>door_on_1.png</url>
+	</door_on_1>
+	
+	<door_on_2>
+		<x>415</x>
+		<y>414</y>
+		<url>door_on_2.png</url>
+	</door_on_2>
+	
+	<door_un_1>
+		<x>415</x>
+		<y>414</y>
+		<url>door_un_1.png</url>
+	</door_un_1>
+	
+	<door_un_2>
+		<x>415</x>
+		<y>414</y>
+		<url>door_un_2.png</url>
+	</door_un_2>
+	
+	<camera_on_1>
+		<x>507</x>
+		<y>414</y>
+		<url>camera_on_1.png</url>
+	</camera_on_1>
+	
+	<camera_on_2>
+		<x>507</x>
+		<y>414</y>
+		<url>camera_on_2.png</url>
+	</camera_on_2>
+	
+	<camera_un_1>
+		<x>507</x>
+		<y>414</y>
+		<url>camera_un_1.png</url>
+	</camera_un_1>
+	
+	<camera_un_2>
+		<x>507</x>
+		<y>414</y>
+		<url>camera_un_2.png</url>
+	</camera_un_2>
+	
+	<rts_on_1>
+		<x>728</x>
+		<y>414</y>
+		<url>rts_on_1.png</url>
+	</rts_on_1>
+	
+	<rts_on_2>
+		<x>728</x>
+		<y>414</y>
+		<url>rts_on_2.png</url>
+	</rts_on_2>
+	
+	<rts_un_1>
+		<x>728</x>
+		<y>414</y>
+		<url>rts_un_1.png</url>
+	</rts_un_1>
+	
+	<rts_un_2>
+		<x>728</x>
+		<y>414</y>
+		<url>rts_un_2.png</url>
+	</rts_un_2>
+
+	<actionBkg>
+		<x>230</x>
+		<y>35</y>
+		<url>../global/circle.png</url>
+	</actionBkg>
+	
+	<action_1>
+		<x>345</x>
+		<y>150</y>
+		<url>action_1.png</url>
+	</action_1>
+	
+	<action_2>
+		<x>345</x>
+		<y>150</y>
+		<url>action_2.png</url>
+	</action_2>
+	
+	<action_3>
+		<x>345</x>
+		<y>150</y>
+		<url>action_3.png</url>
+	</action_3>
+	
+</style>

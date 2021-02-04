@@ -1,0 +1,159 @@
+#include "RTSUtil.h"
+#include "wMain.h"
+#include "SysCommand.h"
+#include "wRTSRemove.h"
+#include "wRTSConfirm.h"
+#include "wRTSDevice.h"
+#include "wRTSReaction.h"
+#include "wRTSGroup.h"
+
+wRTSReaction::wRTSReaction() : mWindow("RTS/Reaction")
+{
+	char s[64];
+	m_bkg.setParent(this);
+	m_bkg.load(m_style, "bkg");
+	m_icon.setParent(this);
+	int type = rTSUtil.getCurrentType();
+	sprintf(s, "icon_%d", type);
+	m_icon.load(m_style, s);
+	m_device.setParent(this);
+	sprintf(s, "device_%d", type);
+	m_device.load(m_style, s);
+	m_op_dir.setParent(this);
+	if (type == RTSUtil::SWINGING || type == RTSUtil::GATE
+		|| type == RTSUtil::SLIDING_GATE) {
+		m_op_dir.load(m_style, "dir2");
+	} else {
+		m_op_dir.load(m_style, "dir1");
+	}
+
+	m_test.setParent(this);
+	m_test.load(m_style, "test");
+	m_test_dir.setParent(this);
+	m_test_dir.load(m_style, "test_arrow");
+	
+	m_mark.setParent(this);
+	m_mark.load(m_style, "mark");
+	m_mark.hide();
+	m_mark_dir.setParent(this);
+	m_mark_dir.load(m_style, "mark_arrow");
+	m_mark_dir.hide();
+	
+	loadNavigation();
+
+	m_reaction = 0;
+	m_action = rTSUtil.getCurrentAction();
+	gettimeofday(&led_tv, NULL);
+}
+
+wRTSReaction::~wRTSReaction()
+{
+}
+
+void wRTSReaction::doReaction(void)
+{
+	m_confirm.load(m_style, "confirm_on");
+	m_cancel.load(m_style, "cancel_on");
+	m_mark.show();
+	m_mark_dir.show();
+	if (!m_reaction) {
+		m_reaction = 1;
+		gettimeofday(&led_tv, NULL);
+	}
+}
+
+void wRTSReaction::doTimer(void)
+{
+	mWindow::doTimer();
+	if (__val(led_tv) && __ts(led_tv) > 200) {
+		loadLed(m_reaction);
+		memset(&led_tv, 0, sizeof(led_tv));
+	}
+}
+
+void wRTSReaction::doEvent(mEvent *e)
+{
+	mWindow::doEvent(e);
+	if (e->type == mEvent::KeyPress) {
+		if (e->wParam == KEY_M_UP) {
+			int channel_id = rTSUtil.getSelectedChnId();
+			command.sendSwitchControl(channel_id+1, 1);
+			doReaction();
+		} else if (e->wParam == KEY_M_DOWN) {
+			int channel_id = rTSUtil.getSelectedChnId();
+			command.sendSwitchControl(channel_id+1, 3);
+			doReaction();
+		} else if (e->wParam == KEY_M_F3) {
+			if (m_reaction == 0) {
+				return;
+			}
+			int channel_id = rTSUtil.getSelectedChnId();
+			if (m_action == rTSUtil.ADD || m_action == rTSUtil.ADD_GROUP) {
+				int type = rTSUtil.getCurrentType();
+				rTSUtil.add(channel_id, (RTSUtil::TYPE)type);
+				rTSUtil.save();
+				wMain *main = new wMain();
+				main->show();
+			} else if (m_action == rTSUtil.REMOVE) {
+				rTSUtil.remove(channel_id);
+				rTSUtil.save();
+				wRTSRemove *rtsRemove = new wRTSRemove();
+				rtsRemove->show();
+			}
+		} else if (e->wParam == KEY_M_CANCEL) {
+			if (m_reaction == 0) {
+				return;
+			}
+			if (m_action == rTSUtil.ADD) {
+				wRTSDevice *rtsDevice = new wRTSDevice();
+				rtsDevice->show();
+			} else if (m_action == rTSUtil.ADD_GROUP) {
+				wRTSGroup *wrtsGroup = new wRTSGroup();
+				wrtsGroup->show();
+			} else if (m_action == rTSUtil.REMOVE) {
+				wRTSConfirm *rtsConfirm = new wRTSConfirm();
+				rtsConfirm->show();
+			}
+		}
+	}
+}
+
+void wRTSReaction::loadNavigation(void)
+{
+	m_menu_area1.setParent(this);
+	m_menu_area1.load(m_style, "menu_area1");
+	m_func1.setParent(this);
+	m_func2.setParent(this);
+	int type = rTSUtil.getCurrentType();
+	if (type == RTSUtil::SWINGING || type == RTSUtil::GATE
+		|| type == RTSUtil::SLIDING_GATE) {
+		m_func1.load(m_style, "open");
+		m_func2.load(m_style, "close");
+	} else {
+		m_func1.load(m_style, "up");
+		m_func2.load(m_style, "down");
+	}
+	m_menu_area2.setParent(this);
+	m_menu_area2.load(m_style, "menu_area2");
+	m_confirm.setParent(this);
+	m_confirm.load(m_style, "confirm_off");
+	m_cancel.setParent(this);
+	m_cancel.load(m_style, "cancel_off");
+	m_separator.setParent(this);
+	m_separator.load(m_style, "separator");
+	m_home.setParent(this);
+	m_home.load(m_style, "home");
+}
+
+void wRTSReaction::loadLed(int mode)
+{
+	uint8_t data[9] = {0};
+	for (int i = LED1; i <= LED9; i++) {
+		data[i] = LED_OFF;
+	}
+	data[LED5] = data[LED6] = LED_ON;
+	if (mode) {
+		data[LED7] = data[LED8] = LED_ON;
+	}
+	command.sendLedControl(data);
+}

@@ -1,0 +1,499 @@
+<style>
+
+	<bkg>
+		<x>0</x>
+		<y>0</y>
+		<url>../../global/bkg.jpg</url>
+	</bkg>
+	
+	<toolbar>
+		<x>0</x>
+		<y>0</y>
+		<url>../../global/toolbar_blue55.jpg</url>
+	</toolbar>
+
+	<exit>
+		<x>0</x>
+		<y>5</y>
+		<url>../../global/exit.png</url>
+	</exit>
+	
+	<title_1>
+		<x>200</x>
+		<y>12</y>
+		<text>RTS TEST COMPLETE</text>
+		<style>font:30; family:light; color:FFFFFF; width:400; height:30; align:center;</style>
+	</title_1>	
+	
+	<title_2>
+		<x>200</x>
+		<y>12</y>
+		<text>RTS TESTING</text>
+		<style>font:30; family:light; color:FFFFFF; width:400; height:30; align:center;</style>
+	</title_2>
+	
+	<!--complete -->
+	<complete_1>
+		<x>100</x>
+		<y>150</y>
+		<text>Step 1 : OK</text>
+		<style>font:25; family:light; color:000000; width:600; height:50; align:center;</style>
+	</complete_1>
+	
+	<complete_2>
+		<x>100</x>
+		<y>200</y>
+		<text>Other Test OK</text>
+		<style>font:20; family:light; color:000000; width:600; height:50; align:center;</style>
+	</complete_2>
+	
+	<restart>
+		<x>232</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</restart>
+	
+	<restart_name>
+		<x>232</x>
+		<y>380</y>
+		<text>Restart</text>
+		<style>font:15; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</restart_name>
+	
+	<reset>
+		<x>430</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</reset>
+	
+	<reset_name>
+		<x>430</x>
+		<y>380</y>
+		<text>Factory Reset</text>
+		<style>font:15; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</reset_name>
+	
+	
+	<!--reset 界面-->
+	<reset_description>
+		<x>100</x>
+		<y>150</y>
+		<text>Do you really want to factory reset?</text>
+		<style>font:30; family:light; color:000000; width:600; height:50; align:center;</style>
+	</reset_description>
+	
+	<reset_yes>
+		<x>232</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</reset_yes>
+	
+	<reset_yes_name>
+		<x>232</x>
+		<y>380</y>
+		<text>Yes</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</reset_yes_name>
+	
+	<reset_no>
+		<x>430</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</reset_no>
+	
+	<reset_no_name>
+		<x>430</x>
+		<y>380</y>
+		<text>No</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</reset_no_name>
+	
+	<!--step 1: start -->
+	<step_one_1_1>
+		<x>100</x>
+		<y>150</y>
+		<text>Step 1 : Check BP Set Working Good</text>
+		<style>font:25; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_one_1_1>
+	
+	<step_one_1_2>
+		<x>100</x>
+		<y>200</y>
+		<text>Now press Test to Start</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_one_1_2>
+	
+	<step_one_1_test>
+		<x>343</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_one_1_test>
+	
+	<step_one_1_test_name>
+		<x>343</x>
+		<y>380</y>
+		<text>Test</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_one_1_test_name>
+	
+	<!-- step 1: 轮询通道 -->
+	<step_one_2_1>
+		<x>100</x>
+		<y>200</y>
+		<text>Step 1 : Check BP Set Working Good</text>
+		<style>font:25; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_one_2_1>
+	
+	<step_one_2_2>
+		<x>100</x>
+		<y>250</y>
+		<text>BP Set Testing ...</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_one_2_2>
+	
+	<!-- step 1: 轮询结果 -->
+	<step_one_3_1>
+		<x>100</x>
+		<y>100</y>
+		<text>Step 1 : Check BP Set Working Good</text>
+		<style>font:25; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_one_3_1>
+	
+	<step_one_3_2>
+		<x>100</x>
+		<y>150</y>
+		<text>Test Finished</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_one_3_2>
+	
+	<step_one_3_on>
+		<x>212</x>
+		<y>250</y>
+		<x_offset>90</x_offset>
+		<y_offset>0</y_offset>
+		<url>../../global/box_on.png</url>
+	</step_one_3_on>
+	
+	<step_one_3_un>
+		<x>212</x>
+		<y>250</y>
+		<x_offset>90</x_offset>
+		<y_offset>0</y_offset>
+		<url>../../global/box_un.png</url>
+	</step_one_3_un>
+	
+	<step_one_3_yes>
+		<x>232</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_one_3_yes>
+	
+	<step_one_3_yes_name>
+		<x>232</x>
+		<y>380</y>
+		<text>Yes</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_one_3_yes_name>
+	
+	<step_one_3_no>
+		<x>430</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_one_3_no>
+	
+	<step_one_3_no_name>
+		<x>430</x>
+		<y>380</y>
+		<text>No</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_one_3_no_name>
+	
+	<!--Step 2: pairing -->
+	<step_two_1_1>
+		<x>20</x>
+		<y>150</y>
+		<text>Step 2 : To Check Good Pairing Product under testing to Receiver</text>
+		<style>font:25; family:light; color:000000; width:760; height:40; align:center;</style>
+	</step_two_1_1>
+	
+	<step_two_1_2>
+		<x>100</x>
+		<y>200</y>
+		<text>Now press Pairing to Start</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_two_1_2>
+	
+	<step_two_1_pairing>
+		<x>331</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_two_1_pairing>
+	
+	<step_two_1_pairing_name>
+		<x>331</x>
+		<y>380</y>
+		<text>Pairing</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_two_1_pairing_name>
+	
+	<!--Step 2: blingking -->
+	<step_two_2_1>
+		<x>20</x>
+		<y>150</y>
+		<text>Step 2 : To Check Good Pairing Product under testing to Receiver</text>
+		<style>font:25; family:light; color:000000; width:760; height:40; align:center;</style>
+	</step_two_2_1>
+	
+	<step_two_2_2>
+		<x>100</x>
+		<y>200</y>
+		<text>Vertify on the receiver if the light is blinking 2 time ...</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_two_2_2>
+	
+	<step_two_2_yes>
+		<x>232</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_two_2_yes>
+	
+	<step_two_2_yes_name>
+		<x>232</x>
+		<y>380</y>
+		<text>Yes</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_two_2_yes_name>
+	
+	<step_two_2_no>
+		<x>430</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_two_2_no>
+	
+	<step_two_2_no_name>
+		<x>430</x>
+		<y>380</y>
+		<text>No</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_two_2_no_name>
+	
+	<!--Step 3: light on -->
+	<step_three_1_1>
+		<x>100</x>
+		<y>150</y>
+		<text>Step 3 : Check BPS Working Good</text>
+		<style>font:25; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_three_1_1>
+	
+	<step_three_1_2>
+		<x>100</x>
+		<y>200</y>
+		<text>Now press Light on to working</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_three_1_2>
+	
+	<step_three_1_on>
+		<x>331</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_three_1_on>
+	
+	<step_three_1_on_name>
+		<x>331</x>
+		<y>380</y>
+		<text>Light on</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_three_1_on_name>
+	
+	<!--Step 3: light on Good -->
+	<step_three_2_1>
+		<x>100</x>
+		<y>100</y>
+		<text>Step 3 : Check BPS Working Good</text>
+		<style>font:25; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_three_2_1>
+	
+	<step_three_2_2>
+		<x>100</x>
+		<y>150</y>
+		<text>Now it is lighting on?</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_three_2_2>
+	
+	<step_three_2_on>
+		<x>357</x>
+		<y>250</y>
+		<url>../../RTSControl/light_top_on_1.png</url>
+	</step_three_2_on>
+	
+	<step_three_2_yes>
+		<x>232</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_three_2_yes>
+	
+	<step_three_2_yes_name>
+		<x>232</x>
+		<y>380</y>
+		<text>Yes</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_three_2_yes_name>
+	
+	<step_three_2_no>
+		<x>430</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_three_2_no>
+	
+	<step_three_2_no_name>
+		<x>430</x>
+		<y>380</y>
+		<text>No</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_three_2_no_name>
+	
+	<!--Step 3: light off -->
+	<step_three_3_1>
+		<x>100</x>
+		<y>150</y>
+		<text>Step 3 : Check BPS Working Good</text>
+		<style>font:25; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_three_3_1>
+	
+	<step_three_3_2>
+		<x>100</x>
+		<y>200</y>
+		<text>Now press Light on to working</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_three_3_2>
+	
+	<step_three_3_off>
+		<x>331</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_three_3_off>
+	
+	<step_three_3_off_name>
+		<x>331</x>
+		<y>380</y>
+		<text>Light off</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_three_3_off_name>
+	
+	<!--Step 3: light off Good -->
+	<step_three_4_1>
+		<x>100</x>
+		<y>100</y>
+		<text>Step 3 : Check BPS Working Good</text>
+		<style>font:25; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_three_4_1>
+	
+	<step_three_4_2>
+		<x>100</x>
+		<y>150</y>
+		<text>Now it is lighting off ?</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_three_4_2>
+	
+	<step_three_4_off>
+		<x>357</x>
+		<y>250</y>
+		<url>../../RTSControl/light_top_un_1.png</url>
+	</step_three_4_off>
+	
+	<step_three_4_yes>
+		<x>232</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_three_4_yes>
+	
+	<step_three_4_yes_name>
+		<x>232</x>
+		<y>380</y>
+		<text>Yes</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_three_4_yes_name>
+	
+	<step_three_4_no>
+		<x>430</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_three_4_no>
+	
+	<step_three_4_no_name>
+		<x>430</x>
+		<y>380</y>
+		<text>No</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_three_4_no_name>
+	
+	<!--Step 4: unPairing -->
+	<step_four_1_1>
+		<x>20</x>
+		<y>150</y>
+		<text>Step 2 : To Check Good Unpairing Product under testing to Receiver</text>
+		<style>font:25; family:light; color:000000; width:760; height:40; align:center;</style>
+	</step_four_1_1>
+	
+	<step_four_1_2>
+		<x>100</x>
+		<y>200</y>
+		<text>Now press Unpairing to Start</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_four_1_2>
+	
+	<step_four_1_unpairing>
+		<x>331</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_four_1_unpairing>
+	
+	<step_four_1_unpairing_name>
+		<x>331</x>
+		<y>380</y>
+		<text>Unpairing</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_four_1_unpairing_name>
+	
+	<!--Step 4: unPairing check-->
+	<step_four_2_1>
+		<x>20</x>
+		<y>150</y>
+		<text>Step 4 : To Check Good Pairing Product under testing to Receiver</text>
+		<style>font:25; family:light; color:000000; width:760; height:40; align:center;</style>
+	</step_four_2_1>
+	
+	<step_four_2_2>
+		<x>100</x>
+		<y>200</y>
+		<text>Vertify on the receiver if the light is blinking 2 time ...</text>
+		<style>font:20; family:light; color:000000; width:600; height:40; align:center;</style>
+	</step_four_2_2>
+	
+	<step_four_2_end>
+		<x>232</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_four_2_end>
+	
+	<step_four_2_end_name>
+		<x>232</x>
+		<y>380</y>
+		<text>End</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_four_2_end_name>
+	
+	<step_four_2_no>
+		<x>430</x>
+		<y>380</y>
+		<url>../../RTS/btn_green_138.png</url>
+	</step_four_2_no>
+	
+	<step_four_2_no_name>
+		<x>430</x>
+		<y>380</y>
+		<text>No</text>
+		<style>font:20; family:light; color:FFFFFF; width:138; height:50; align:center;</style>
+	</step_four_2_no_name>
+
+</style>

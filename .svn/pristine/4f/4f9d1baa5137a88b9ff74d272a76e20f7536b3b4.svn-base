@@ -1,0 +1,136 @@
+#include "RTSUtil.h"
+#include "sys.h"
+#include "wMain.h"
+#include "wRTSProg.h"
+#include "wRTSGroup.h"
+#include "SysCommand.h"
+
+static int select_idx = 0;
+
+wRTSGroup::wRTSGroup(): mWindow("RTS/Group")
+{
+	m_bkg.setParent(this);
+	m_bkg.load(m_style, "bkg");
+	m_icon.setParent(this);
+	m_icon.load(m_style, "icon");
+	loadChannel();
+	m_select_area.setParent(this);
+	m_select_area.load(m_style, "select_area");
+
+	loadDevice();
+	selectChange();
+	loadNavigation();
+	fb_timeout = 120;
+	gettimeofday(&led_tv, NULL);
+}
+
+wRTSGroup::~wRTSGroup()
+{
+}
+
+void wRTSGroup::selectChange(void)
+{
+	int x = m_style.getInt("/style/select_area/x", 79);
+	int x_offset = m_style.getInt("/style/select_area/x_offset", 120);
+	m_select_area.move(x + x_offset*select_idx, m_select_area.y());
+}
+
+void wRTSGroup::doTimer(void)
+{
+	mWindow::doTimer();
+	if (__val(led_tv) && __ts(led_tv) > 200) {
+		loadLed();
+		memset(&led_tv, 0, sizeof(led_tv));
+	}
+}
+
+void wRTSGroup::doEvent(mEvent *e)
+{
+	mWindow::doEvent(e);
+	if (e->type == mEvent::KeyPress) {
+		if (e->wParam == KEY_M_CONFIRM) {
+			if (rTSUtil.getChannelType(select_idx) != rTSUtil.TYPE_DEFAULT) {
+                rTSUtil.setCurrentAction(rTSUtil.ADD_GROUP);
+                rTSUtil.setSelectedChnId(select_idx);
+				rTSUtil.setCurrentType(rTSUtil.getChannelType(select_idx));
+				wRTSProg *w = new wRTSProg();
+				w->show();
+			}
+		} else if (e->wParam == KEY_M_RIGHT) {
+			if (++select_idx >= RTS_CHN_MAX) {
+				select_idx = 0;
+			}
+			selectChange();
+		} else if (e->wParam == KEY_M_LEFT) {
+			if (--select_idx < 0) {
+				select_idx = RTS_CHN_MAX - 1;
+			}
+			selectChange();
+		} else if (e->wParam == KEY_M_HOME) {
+			select_idx = 0;
+			wMain *main = new wMain();
+			main->show();
+		}
+	}
+}
+
+void wRTSGroup::loadChannel(void)
+{
+	char buf[128];
+	for (int i = 0; i < RTS_CHN_MAX; i++) {
+		sprintf(buf, "channel_%d", i+1);
+		m_channel[i].setParent(this);
+		m_channel[i].load(m_style, buf);
+	}
+}
+
+void wRTSGroup::loadDevice(void)
+{
+	char buf[128];
+	for (int i = 0; i < RTS_CHN_MAX; i++) {
+		int channel_type = rTSUtil.getChannelType(i);
+        int number = rTSUtil.getChannelNumber(i);
+		sprintf(buf, "device_%d", channel_type);
+		m_channel[i].setParent(this);
+		m_channel[i].loadUrl(m_style, buf);
+
+        m_number[i].setParent(this);
+		m_number[i].load(m_style, "number");
+        int x_offset = m_style.getInt("/style/number/x_offset", 120);
+		sprintf(buf, "%d", number);
+		if (number > 1 && number < 10) {
+			m_number[i].load(m_style, "number_1");
+		} else if (number >= 10) {
+			m_number[i].load(m_style, "number_2");
+		}
+		m_number[i].setText(buf);
+		m_number[i].move(m_number[0].x() + x_offset*i, m_number[0].y());
+	}
+}
+
+void wRTSGroup::loadNavigation(void)
+{
+	m_right.setParent(this);
+	m_right.load(m_style, "right");
+	m_left.setParent(this);
+	m_left.load(m_style, "left");
+	m_confirm.setParent(this);
+	m_confirm.load(m_style, "confirm");
+	m_separator.setParent(this);
+	m_separator.load(m_style, "separator");
+	m_home.setParent(this);
+	m_home.load(m_style, "home");
+}
+
+void wRTSGroup::loadLed(void)
+{
+	uint8_t data[9] = {0};
+	for (int i = LED1; i <= LED9; i++) {
+		if (i >= LED5 && i != LED7) {
+			data[i] = LED_ON;
+		} else {
+			data[i] = LED_OFF;
+		}
+	}
+	command.sendLedControl(data);
+}

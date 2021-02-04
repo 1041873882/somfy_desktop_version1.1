@@ -1,0 +1,143 @@
+#include "SysSound.h"
+#include "wMain.h"
+#include "wSetup.h"
+#include "BeanUtil.h"
+#include "wSoundSetting.h"
+#include "wBellSetting.h"
+#include "SysCommand.h"
+
+wBellSetting::wBellSetting(): mWindow("setup/bell")
+{
+	m_bkg.setParent(this);
+	m_bkg.load(m_style, "bkg");
+	m_icon.setParent(this);
+	m_icon.load(m_style, "icon");
+	char buf[128];
+	for (int i = 0; i < MAX_MUSIC_NUM; i++) {
+		sprintf(buf, "music_%d", i+1);
+		m_music[i].setParent(this);
+		m_music[i].load(m_style, buf);
+	}
+	m_select_area.setParent(this);
+	m_select_area.load(m_style, "select_area");
+	m_select_idx = beanUtil.getBellId();
+	m_reset_state = beanUtil.getResetState();
+	
+	selectChange();
+	loadNavigation();
+	gettimeofday(&led_tv, NULL);
+}
+
+wBellSetting::~wBellSetting()
+{
+}
+
+void wBellSetting::selectChange(void)
+{
+	char buf[128];
+	sprintf(buf, "/style/music_%d/x", m_select_idx+1);
+	int x = m_style.getInt(buf, 79);
+	sprintf(buf, "/style/music_%d/y", m_select_idx+1);
+	int y = m_style.getInt(buf, 95);
+	m_select_area.move(x, y);
+}
+
+void wBellSetting::doChange(int direction)
+{
+	if (direction == 1) {
+		if (++m_select_idx >= MAX_MUSIC_NUM) {
+			m_select_idx = 0;
+		}
+	} else if (direction == -1) {
+		if (--m_select_idx < 0) {
+			m_select_idx = MAX_MUSIC_NUM - 1;
+		}
+	} else {
+		m_select_idx += MAX_NUM_PER_LINE;
+		if (m_select_idx >= MAX_MUSIC_NUM) {
+			if (m_select_idx < (MAX_MUSIC_NUM+m_select_idx%MAX_NUM_PER_LINE)) {
+				m_select_idx = MAX_MUSIC_NUM - 1;
+			} else {
+				m_select_idx = m_select_idx % MAX_NUM_PER_LINE;
+			}
+		}
+	}
+	sound.stop();
+	sound.belling(m_select_idx, 100);
+	selectChange();
+}
+
+void wBellSetting::doTimer(void)
+{
+	mWindow::doTimer();
+	if (__val(led_tv) && __ts(led_tv) > 200) {
+		loadLed(m_reset_state);
+		memset(&led_tv, 0, sizeof(led_tv));
+	}
+}
+
+void wBellSetting::doEvent(mEvent *e)
+{
+	mWindow::doEvent(e);
+	if (e->type == mEvent::KeyPress) {
+		if (e->wParam == KEY_M_CONFIRM) {
+			sound.stop();
+			beanUtil.setBellId(m_select_idx);
+			beanUtil.save();
+			if (!m_reset_state) {
+				wSetup *setup = new wSetup();
+				setup->show();
+			} else {
+				wSoundSetting *soundSetting = new wSoundSetting(BELL_CHANNEL);
+				soundSetting->show();
+			}
+		} else if (e->wParam == KEY_M_RIGHT) {
+			doChange(1);
+		} else if (e->wParam == KEY_M_LEFT) {
+			doChange(-1);
+		} else if (e->wParam == KEY_M_F3) {
+			doChange(2);
+		} else if (e->wParam == KEY_M_HOME) {
+			if (!m_reset_state) {
+				wMain *main = new wMain();
+				main->show();
+			}
+		}
+	}
+}
+
+void wBellSetting::loadNavigation(void)
+{
+	m_right.setParent(this);
+	m_right.load(m_style, "right");
+	m_left.setParent(this);
+	m_left.load(m_style, "left");
+	m_down.setParent(this);
+	m_down.load(m_style, "down");
+	m_confirm.setParent(this);
+	m_confirm.load(m_style, "confirm");
+	m_separator.setParent(this);
+	m_separator.load(m_style, "separator");
+	m_home.setParent(this);
+	if (!m_reset_state) {
+		m_home.load(m_style, "home_on");
+	} else {
+		m_home.load(m_style, "home_off");
+	}
+}
+
+void wBellSetting::loadLed(int mode)
+{
+	uint8_t data[9] = {0};
+	for (int i = LED1; i <= LED9; i++) {
+		if (i >= LED5 && i < LED9) {
+			data[i] = LED_ON;
+		} else {
+			data[i] = LED_OFF;
+		}
+	}
+	if (!mode) {
+		data[LED9] = LED_ON;
+	}
+	command.sendLedControl(data);
+}

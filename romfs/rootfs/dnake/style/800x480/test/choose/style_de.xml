@@ -1,0 +1,56 @@
+<style>
+	
+	<bkg>
+		<x>0</x>
+		<y>0</y>
+		<url>../../global/bkg.jpg</url>
+	</bkg>
+	
+	<bg_screen>
+		<x>100</x>
+		<y>155</y>
+		<url>../../upgradeAlert/bg_version.jpg</url>
+	</bg_screen>
+	
+	<screen_txt>
+		<x>100</x>
+		<y>155</y>
+		<text>Screen Test</text>
+		<style>font:23; color:000000; width:256; height:56; align:center;</style>
+	</screen_txt>
+	
+	<screen>
+		<x>400</x>
+		<y>160</y>
+		<url>../../global/reset/next_blue.png</url>
+	</screen>
+	
+	<bg_RTS>
+		<x>100</x>
+		<y>230</y>
+		<url>../../upgradeAlert/bg_version.jpg</url>
+	</bg_RTS>
+	
+	<RTS_txt>
+		<x>100</x>
+		<y>230</y>
+		<text>RTS Test</text>
+		<style>font:23; color:000000; width:256; height:56; align:center;</style>
+	</RTS_txt>
+	
+	<RTS>
+		<x>400</x>
+		<y>235</y>
+		<url>../../global/reset/next_blue.png</url>
+	</RTS>
+	
+	<exit>
+		<x>730</x>
+		<y>420</y>
+		<url>../../global/reset/next_blue.png</url>
+	</exit>
+	
+</style>
+
+	
+	

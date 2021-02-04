@@ -1,0 +1,261 @@
+#include "sys.h"
+#include "SysRTC.h"
+#include "wMain.h"
+#include "wSetup.h"
+#include "BeanUtil.h"
+#include "wTimeSetting.h"
+#include "wDateSetting.h"
+#include "SysCommand.h"
+
+#define SOFTWAER_FACTORY_YEAR	2021
+
+wDateSetting::wDateSetting(): mWindow("setup/date")
+{
+	m_bkg.setParent(this);
+	m_bkg.load(m_style, "bkg");
+	m_icon.setParent(this);
+	m_icon.load(m_style, "icon");
+
+	m_date_area.setParent(this);
+	m_date_area.load(m_style, "date_area");
+	m_select_area.setParent(this);
+	m_select_area.load(m_style, "select_area");
+	m_day.setParent(this);
+	m_day.load(m_style, "day");
+	m_separator_1.setParent(this);
+	m_separator_1.load(m_style, "separator_1");
+	m_month.setParent(this);
+	m_month.load(m_style, "month");
+	m_separator_2.setParent(this);
+	m_separator_2.load(m_style, "separator_2");
+	m_year.setParent(this);
+	m_year.load(m_style, "year");
+
+	m_select_idx = 0;
+	m_reset_state = beanUtil.getResetState();
+	if (m_reset_state) {
+		fb_timeout = 0;
+	}
+	loadTime();
+	loadNavigation();
+	selectChange();
+	gettimeofday(&led_tv, NULL);
+}
+
+wDateSetting::~wDateSetting()
+{
+}
+
+void wDateSetting::selectChange(void)
+{
+	int x = m_style.getInt("/style/select_area/x", 90);
+	int x_offset = m_style.getInt("/style/select_area/x_offset", 202);
+	m_select_area.move(x + x_offset*m_select_idx, m_select_area.y());
+	if (m_select_idx == 0) {
+		m_year.setFocus(0);
+		m_day.setFocus(1);
+	} else if (m_select_idx == 1) {
+		m_day.setFocus(0);
+		m_month.setFocus(1);
+	} else {
+		m_month.setFocus(0);
+		m_year.setFocus(1);
+	}
+}
+
+void wDateSetting::doUpdate(void)
+{
+	char buf[128];
+	sprintf(buf, "%02d", nDay);
+	m_day.setText(buf);
+	sprintf(buf, "%02d", nMonth);
+	m_month.setText(buf);
+	sprintf(buf, "%d", nYear);
+	m_year.setText(buf);
+}
+
+void wDateSetting::doChange(int direction)
+{
+	if (m_select_idx == 0) { // day
+		if (!direction) {
+			if (++nDay > getDaysOfMonth(nYear, nMonth)) {
+				nDay = 1;
+			}
+		} else {
+			if (--nDay < 1) {
+				nDay = getDaysOfMonth(nYear, nMonth);
+			}
+		}
+	} else if (m_select_idx == 1) { // month
+		if (!direction) {
+			if (++nMonth > 12) {
+				nMonth = 1;
+			}
+		} else {
+			if (--nMonth < 1) {
+				nMonth = 12;
+			}
+		}
+	} else if (m_select_idx == 2) { // year
+		if (!direction) {
+			nYear++;
+		} else {
+			nYear--;
+		}
+	}
+	doUpdate();
+}
+
+void wDateSetting::loadTime(void)
+{
+	struct tm *tm;
+	time_t t = time(NULL);
+	tm = localtime(&t);
+	if (m_reset_state) {
+		nYear = SOFTWAER_FACTORY_YEAR;
+		nMonth = 1;
+		nDay = 1;
+		nHour = 12;
+		nMinute = 0;
+	} else {
+		nYear = tm->tm_year + 1900;
+		nMonth = tm->tm_mon + 1;
+		nDay = tm->tm_mday;
+		nHour = tm->tm_hour;
+		nMinute = tm->tm_min;
+	}
+	doUpdate();
+}
+
+int wDateSetting::isLeapYear(int year)
+{
+	if (((year%4 == 0) && (year%100 != 0)) || (year%400 == 0)) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+int wDateSetting::getDaysOfMonth(int year, int month)
+{
+	int days = 0;
+	switch (month) {
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			days = 31;
+			break;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			days = 30;
+			break;
+		case 2:
+			days = 28 + isLeapYear(year);
+			break;
+	}
+	return days;
+}
+
+void wDateSetting::doTimer(void)
+{
+	mWindow::doTimer();
+	if (__val(led_tv) && __ts(led_tv) > 200) {
+		loadLed(m_reset_state);
+		memset(&led_tv, 0, sizeof(led_tv));
+	}
+}
+
+void wDateSetting::doEvent(mEvent *e)
+{
+	mWindow::doEvent(e);
+	if (e->type == mEvent::KeyPress) {
+		if (e->wParam == KEY_M_CONFIRM) {
+			syncTime();
+			if (!m_reset_state) {
+				wSetup *setup = new wSetup();
+				setup->show();
+			} else {
+				wTimeSetting *time = new wTimeSetting();
+				time->show();
+			}
+		} else if (e->wParam == KEY_M_F3) {
+			if (++m_select_idx > 2) {
+				m_select_idx = 0;
+			}
+			selectChange();
+		} else if (e->wParam == KEY_M_UP) {
+			doChange(0);
+		} else if (e->wParam == KEY_M_DOWN) {
+			doChange(1);
+		} else if (e->wParam == KEY_M_HOME) {
+			if (!m_reset_state) {
+				wMain *main = new wMain();
+				main->show();
+			}
+		}
+	}
+}
+
+void wDateSetting::syncTime(void)
+{
+	int ret = 0;
+	struct tm tm;
+	struct timeval tv;
+	memset(&tm, 0, sizeof(struct tm));
+	tm.tm_year = nYear - 1900;
+	tm.tm_mon = nMonth - 1;
+	tm.tm_mday = nDay;
+	tm.tm_hour = nHour;
+	tm.tm_min = nMinute;
+	tm.tm_isdst = 0;
+	tv.tv_sec = mktime(&tm);
+	tv.tv_usec = 0;
+
+	ret = settimeofday(&tv, NULL);
+	if (ret != 0) {
+		fprintf(stderr, "settimeofday failed\n");
+	}
+	rtc.hwclock();
+}
+
+void wDateSetting::loadNavigation(void)
+{
+	m_up.setParent(this);
+	m_up.load(m_style, "up");
+	m_down.setParent(this);
+	m_down.load(m_style, "down");
+	m_right.setParent(this);
+	m_right.load(m_style, "right");
+	m_confirm.setParent(this);
+	m_confirm.load(m_style, "confirm");
+	m_separator.setParent(this);
+	m_separator.load(m_style, "separator");
+	m_home.setParent(this);
+	if (!m_reset_state) {
+		m_home.load(m_style, "home_on");
+	} else {
+		m_home.load(m_style, "home_off");
+	}
+}
+
+void wDateSetting::loadLed(int mode)
+{
+	uint8_t data[9] = {0};
+	for (int i = LED1; i <= LED9; i++) {
+		if (i >= LED5 && i < LED9) {
+			data[i] = LED_ON;
+		} else {
+			data[i] = LED_OFF;
+		}
+	}
+	if (!mode) {
+		data[LED9] = LED_ON;
+	}
+	command.sendLedControl(data);
+}

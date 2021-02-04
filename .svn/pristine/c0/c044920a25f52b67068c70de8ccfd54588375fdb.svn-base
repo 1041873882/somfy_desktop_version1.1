@@ -1,0 +1,15 @@
+#!/bin/sh
+
+mount -t jffs2 /dev/mtdblock5 /dnake/data
+
+ifconfig lo 127.0.0.1
+
+insmod /lib/modules/tvd.ko
+insmod /lib/modules/ve.ko
+
+mkdir /var/etc
+mkdir /var/run
+
+/dnake/bin/monitor &
+
+#telnetd -p 9900 -l /bin/sh

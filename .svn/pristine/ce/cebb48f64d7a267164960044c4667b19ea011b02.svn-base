@@ -1,0 +1,39 @@
+#ifndef __W_RTS_REMOVE_H__
+#define __W_RTS_REMOVE_H__
+
+#include "mWindow.h"
+#include "mButton.h"
+
+#define RTS_CHN_MAX		5
+
+class wRTSRemove: public mWindow {
+public:
+	wRTSRemove();
+	virtual ~wRTSRemove();
+
+	void doTimer(void);
+	void doEvent(mEvent *e);
+	void selectChange(void);
+	void loadChannel(void);
+	void loadDevice(void);
+	void loadNavigation(void);
+	void loadLed(void);
+private:
+	mPixmap m_bkg;
+	mPixmap m_icon;
+	
+	mButton m_number[RTS_CHN_MAX];
+	mPixmap m_channel[RTS_CHN_MAX];
+	mPixmap m_select_area;
+
+	mPixmap m_right;
+	mPixmap m_left;
+	mPixmap m_confirm;
+	mPixmap m_separator;
+	mPixmap m_home;
+private:
+	int m_select_idx;
+	struct timeval led_tv;
+};
+
+#endif

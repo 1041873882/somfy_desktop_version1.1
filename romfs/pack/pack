@@ -1,0 +1,91 @@
+#!/bin/bash
+
+#set -e
+
+ROOT_DIR=$PWD
+TOOLS_DIR=${ROOT_DIR}/pctools
+OUT_DIR=${ROOT_DIR}/out
+export PATH=${TOOLS_DIR}/linux/mod_update:${TOOLS_DIR}/linux/eDragonEx:${TOOLS_DIR}/linux/fsbuild200:${TOOLS_DIR}/linux/openssl:$PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TOOLS_DIR}/linux/libs:/${TOOLS_DIR}/linux/libs/jffs
+DEBUG_VERSION=release
+
+show_help()
+{
+printf "
+NAME
+    pack-new - The pack tools for linux firmware
+
+SYNOPSIS
+    pack [-h] [-b board]
+
+OPTIONS
+    -h                  Display help message
+    -b [board_type]     Board type, e.g. E72 
+    -c [custom]         custom board,e.g HYT,LILIN
+"
+}
+
+while getopts hc:p:b:B:d:f: OPTION
+do
+    case $OPTION in
+    h) show_help
+    exit 0
+    ;;
+
+    b) PACK_BOARD=$OPTARG
+    ;;
+
+    c) CUSTOM_INFO=$OPTARG
+    ;;
+
+    d) DEBUG_VERSION=$OPTARG
+    ;;
+
+    *) show_help
+    exit 0
+    ;;
+esac
+done
+
+do_prepare()
+{
+	if [ -d ${OUT_DIR}/$CUSTOM_INFO/output_$PACK_BOARD ]; then
+		rm -rf ${OUT_DIR}/$CUSTOM_INFO/output_$PACK_BOARD/
+	fi
+	mkdir -p ${OUT_DIR}/$CUSTOM_INFO/output_$PACK_BOARD/
+}
+
+do_pack_linux()
+{
+	printf "Packing for linux\n"
+
+	cp -v pack_src/$CUSTOM_INFO/$PACK_BOARD/kernel/zImage ${OUT_DIR}/$CUSTOM_INFO/output_$PACK_BOARD/kernel.fex
+
+	mksquashfs ../rootfs ${OUT_DIR}/$CUSTOM_INFO/output_$PACK_BOARD/rootfs_squashfs.fex -noappend -comp xz
+
+	mkfs.jffs2 -d ./pack_src/$CUSTOM_INFO/$PACK_BOARD/data  -o ./pack_src/$CUSTOM_INFO/$PACK_BOARD/config/cfg.fex  -s 0x100 -e 0x10000 -p 0x300000
+
+	cp -v pack_src/$CUSTOM_INFO/$PACK_BOARD/boot/boot0.dd ${OUT_DIR}/$CUSTOM_INFO/output_$PACK_BOARD/boot0.dd   	
+	cp -v pack_src/$CUSTOM_INFO/$PACK_BOARD/boot/boot1.dd ${OUT_DIR}/$CUSTOM_INFO/output_$PACK_BOARD/boot1.dd  	
+	cp -v pack_src/$CUSTOM_INFO/$PACK_BOARD/config/* ${OUT_DIR}/$CUSTOM_INFO/output_$PACK_BOARD/
+
+	cd ${OUT_DIR}/$CUSTOM_INFO/output_$PACK_BOARD/
+	mv boot_logo.jpg boot_logo.fex
+	mv x1l.dtb dtb.fex
+
+	busybox unix2dos sys_partition.fex
+	script sys_partition.fex
+	update_mbr sys_partition.bin  1
+
+	merge_package full_img.fex boot0.dd boot1.dd sunxi_mbr.fex sys_partition.bin
+
+	rm dlinfo.fex
+	rm ./sys_partition.*	
+	mv full_img.fex image.dd
+
+	printf "pack finish\n"
+}
+
+show_help
+do_prepare
+do_pack_linux
