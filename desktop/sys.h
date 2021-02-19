@@ -20,7 +20,7 @@
 //正式发布软件版本号
 #define SOFT_VERSION  "v1.0.1"
 //测试软件版本号
-#define TEST_VERSION  "t1.0.2"
+#define TEST_VERSION  "t1.0.3"
 
 enum {
 	LANG_CHS = 0,

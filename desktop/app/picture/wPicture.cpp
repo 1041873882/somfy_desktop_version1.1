@@ -176,12 +176,19 @@ void wPicture::doChange(int direction)
 		if (m_position <= 0) {
 			return;
 		}
+		if (m_position <= m_unReadPictureNum) {
+			std::string name("");
+			pictureUtil.loadPictureName(m_position, &name);
+			if (pictureUtil.isUnReadPicture(name)) {
+				pictureUtil.changeSysFileName(m_position, &name);
+			}
+		}
 		m_position--;
 	} else if (direction == 1) {
 		if (m_position >= m_pictureNum - 1) {
 			return;
 		}
-		if (m_position+1 <= m_unReadPictureNum) {
+		if (m_position <= m_unReadPictureNum) {
 			std::string name("");
 			pictureUtil.loadPictureName(m_position, &name);
 			if (pictureUtil.isUnReadPicture(name)) {

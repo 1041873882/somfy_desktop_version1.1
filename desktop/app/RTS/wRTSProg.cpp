@@ -15,11 +15,15 @@ wRTSProg::wRTSProg() : mWindow("RTS/Prog")
 	m_bkg.load(m_style, "bkg");
 
 	m_icon.setParent(this);
+	m_mark_smoove.setParent(this);
+	m_mark_situo.setParent(this);
 	m_action = rTSUtil.getCurrentAction();
 	if (m_action == rTSUtil.ADD || m_action == rTSUtil.ADD_GROUP) {
 		char s[64];
 		sprintf(s, "icon_%d", rTSUtil.getCurrentType());
 		m_icon.load(m_style, s);
+		m_mark_smoove.load(m_style, "mark_smoove");
+		m_mark_situo.load(m_style, "mark_situo");
 	} else {
 		m_icon.load(m_style, "icon");
 	}

@@ -22,6 +22,8 @@ private:
 	mPixmap m_micromodule;
 	mPixmap m_remote;
 	mButton m_mark;
+	mButton m_mark_smoove;
+	mButton m_mark_situo;
 
 	mPixmap m_right;
 	mPixmap m_left;

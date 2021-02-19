@@ -188,7 +188,9 @@ void wTalk::doEvent(mEvent *e)
 				if (sendBothMonitorMsg(AC_ANSWER)) {
 					return;
 				}
+				m_menu_select = MENU_CAPTRUE;
 				m_led_select = LED_ANSWER;
+				loadNavigation();
 				gettimeofday(&led_tv, NULL);
 				command.sendAnswerReq(MCU_DOOR_MACHINE, command.ANSWER_CALL);
 			} else if (command.m_mode >= command.TALKING) {
@@ -471,7 +473,7 @@ void wTalk::loadNavigation(void)
 	m_menu_area.setParent(this);
 	for (int i = 0; i < MAX_CUSTOM_BTN; i++) {
 		m_custom_func[i].setParent(this);
-		m_custom_number[i].setParent(this);
+		m_channel_number[i].setParent(this);
 		m_channel[i].setParent(this);
 	}
 	m_menu_area.setParent(this);
@@ -499,23 +501,20 @@ void wTalk::loadNavigation(void)
 			m_custom_func[i].move(m_custom_func[0].x(), m_custom_func[0].y() + y_offset*i);
 			
 			int number = rTSUtil.getChannelNumber(i);
-			m_custom_number[i].show();
-			m_custom_number[i].load(m_style, "custom_number");
+			m_channel_number[i].show();
 			sprintf(buf, "%d", number);
-			if (number > 1 && number < 10) {
-				m_custom_number[i].load(m_style, "custom_number_1");
-			} else if (number >= 10) {
-				m_custom_number[i].load(m_style, "custom_number_2");
+			if (number > 1) {
+				m_channel_number[i].load(m_style, "channel_number");
+				m_channel_number[i].setText(buf);
+				m_channel_number[i].move(m_channel_number[i].x(), m_channel_number[i].y() + y_offset*i);
 			}
-			m_custom_number[i].setText(buf);
-			m_custom_number[i].move(m_custom_number[0].x(), m_custom_number[0].y() + y_offset*i);
 		}
 	} else if (m_menu_select == MENU_CONTROL) {
 		loadControl(1);
 		int select_channel = rTSUtil.getSelectedChnId();
 		int y_offset = m_style.getInt("/style/m_channel/y_offset", 96);
 		for (int i = 0; i < MAX_CUSTOM_BTN; i++) {
-			m_custom_number[i].hide();
+			m_channel_number[i].hide();
 			m_custom_func[i].hide();
 			m_channel[i].show();
 			m_channel[i].load(m_style, "channel");
@@ -543,7 +542,7 @@ void wTalk::loadNavigation(void)
 		m_arrow.show();
 		loadControl(0);
 		for (int i = 0; i < MAX_CUSTOM_BTN; i++) {
-			m_custom_number[i].hide();
+			m_channel_number[i].hide();
 			m_custom_func[i].hide();
 			m_channel[i].hide();
 		}
@@ -571,6 +570,7 @@ void wTalk::loadControl(int val)
 		m_up.load(m_style, "up");
 		m_stop.load(m_style, "stop");
 		m_down.load(m_style, "down");
+		m_separator.load(m_style, "separator");
 		m_back.load(m_style, "back");
 	} else {
 		m_select_func.hide();

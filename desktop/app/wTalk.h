@@ -78,7 +78,7 @@ private:
 	mPixmap m_camera;
 	mPixmap m_arrow;
 	mPixmap m_custom_func[MAX_CUSTOM_BTN];
-	mButton m_custom_number[MAX_CUSTOM_BTN];
+	mButton m_channel_number[MAX_CUSTOM_BTN];
 	mPixmap m_channel[MAX_CUSTOM_BTN];
 	mPixmap m_select_func;
 	mPixmap m_up;

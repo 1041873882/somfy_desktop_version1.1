@@ -177,7 +177,7 @@ void wMain::loadCustomBtn(void)
 			m_channel_number[i].setParent(this);
 			m_channel_number[i].load(m_style, "channel_number");
 			m_channel_number[i].setText(buf);
-			m_channel_number[i].move(m_channel_number[0].x(), m_channel_number[0].y() + y_offset*i);
+			m_channel_number[i].move(m_channel_number[i].x(), m_channel_number[i].y() + y_offset*i);
 		}
 	}
 }

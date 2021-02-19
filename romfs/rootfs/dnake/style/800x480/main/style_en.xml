@@ -49,18 +49,12 @@
 		<url>../navigation/number_2.png</url>
 		<style>font:16; color:000000; top:-1; align:center;</style>
 	</channel_number>
-	<custom_number_1>
+	<channel_number_1>
 		<x>733</x>
 		<y>18</y>
 		<url>../navigation/number_1.png</url>
 		<style>font:16; color:000000; top:-1; left:2; align:center;</style>
-	</custom_number_1>
-	<custom_number_2>
-		<x>733</x>
-		<y>18</y>
-		<url>../navigation/number_2.png</url>
-		<style>font:16; color:000000; top:-1; left:0; align:center;</style>
-	</custom_number_2>
+	</channel_number_1>
 	<custom_func>
 		<x>741</x>
 		<y>28</y>

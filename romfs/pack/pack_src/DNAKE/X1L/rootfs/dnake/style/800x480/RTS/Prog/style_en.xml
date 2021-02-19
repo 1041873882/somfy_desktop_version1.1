@@ -71,20 +71,20 @@
 		<url>../../global/mark.png</url>
 		<style>font:24; color:ffffff; width:58; height:43; align:center;</style>
 	</mark>
-	<mark_1>
-		<x>342</x>
-		<y>390</y>
+	<mark_smoove>
+		<x>206</x>
+		<y>66</y>
 		<text>Smoove</text>
 		<url>mark_1.png</url>
 		<style>font:24; color:ffffff; width:114; height:43; align:center;</style>
-	</mark_1>
-	<mark_2>
-		<x>342</x>
-		<y>390</y>
+	</mark_smoove>
+	<mark_situo>
+		<x>405</x>
+		<y>66</y>
 		<text>Situo</text>
 		<url>mark_2.png</url>
 		<style>font:24; color:ffffff; width:83; height:43; align:center;</style>
-	</mark_2>
+	</mark_situo>
 	<menu_area>
 		<x>716</x>
 		<y>22</y>

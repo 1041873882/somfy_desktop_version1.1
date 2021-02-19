@@ -109,11 +109,11 @@ void wRTSRemove::loadDevice(void)
 		m_channel[i].loadUrl(m_style, buf);
 		int number = rTSUtil.getChannelNumber(i);
 		if (number > 1) {
+			sprintf(buf, "%d", number);
 			m_number[i].setParent(this);
 			m_number[i].load(m_style, "number");
-			sprintf(buf, "%d", number);
 			m_number[i].setText(buf);
-			m_number[i].move(m_number[0].x() + x_offset*i, m_number[0].y());
+			m_number[i].move(m_number[i].x() + x_offset*i, m_number[i].y());
 		}
 	}
 }
